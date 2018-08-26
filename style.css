@@ -1,0 +1,46 @@
+.wrapper {
+      font-family: Times New Roman;
+      width: 50%;
+      clear: both
+  }
+  .title {
+      float: left;
+      font-family: Times New Roman;
+      font-size: 18px;
+      font-weight: bold;
+  }
+  .superscript {
+      float: right;
+      font-family: Times New Roman;
+      font-size: 10px;
+  }
+  .form {
+      border: solid 1px black;
+      width: 50%;
+      height:1.5in;
+      clear: both;
+  }
+  .input {
+    width: 50%;
+  }
+  .bodytext {
+      margin: 0.1in;
+      font-family: Lucida Console;
+      font-size: 12px;
+  }
+  .subtext{
+      font-family: Lucida Console;
+      font-size: 10px;"
+  }
+  .submit {
+      font-family: Lucida Console
+      font-size: 14px;
+  }
+  .list-numeral {
+    float: left;
+    width: 5%;
+  }
+  .list-text {
+    float: left;
+    width: 95%
+  }

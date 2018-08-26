@@ -5,24 +5,37 @@ import shutil
 import tarfile
 import crystal
 
-print("Content-Type: text/html\n")
+print("Content-Type: text/html; charset=utf-8\n")
 
 print("""
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<div class="wrapper">
+ <div class="title">
+     Crystal Converter
+ </div>
+ <div class="superscript">
+     <sup title="1) Enter package name\n2) Upload clean.sql and profile.sql\n3) Download .properties files.">
+        <a href="/about.html">What's this?</a>
+     </sup>
+ </div>
+</div>
+
 <form method="post" enctype="multipart/form-data">
-<div style="border: solid 1px black; width: 50%;">
- <div style="margin: 0.25in;">
+<div class="form">
+ <div class="bodytext">
      <div>
-        <label for="package">Report package name:</label>
-        <input type="text" id="package" name="package" required autofocus>
+        <label for="package">Report package name:</label> <br />
+        <input class="input" type="text" id="package" name="package" required autofocus>
      </div>
      <br />
      <div>
-       <label for="file">Choose files to upload</label>
-       <input type="file" id="file" name="file" required multiple>
+       <label for="file">Choose files to upload:</label> <br />
+       <input class="input subtext" type="file" id="file" name="file" required multiple>
      </div>
-     <br />
+     <br /><br /><br />
      <div>
-       <button style="font-size: 20px">Submit</button>
+       <button class="submit">Submit</button>
      </div>
  </div>
 </div>
@@ -33,16 +46,16 @@ formData = cgi.FieldStorage()
 
 packageName = formData["package"].value
 
-if os.path.exists("uploads/" + packageName):
-    shutil.rmtree("uploads/" + packageName)
-
-if os.path.exists("downloads/" + packageName):
-    shutil.rmtree("downloads/" + packageName)
-
-os.makedirs("uploads/" + packageName)
-os.makedirs("downloads/" + packageName)
-
 if "file" in formData:
+    if os.path.exists("uploads/" + packageName):
+        shutil.rmtree("uploads/" + packageName)
+
+    if os.path.exists("downloads/" + packageName):
+        shutil.rmtree("downloads/" + packageName)
+
+    os.makedirs("uploads/" + packageName)
+    os.makedirs("downloads/" + packageName)
+
     for resource in formData["file"]:
         fileName = resource.filename
         fileContent = resource.value
@@ -69,4 +82,4 @@ if "file" in formData:
     print("<b>Your download is ready: </b>")
 
     href = "downloads/" +packageName+ "/" +packageName+ ".tar"
-    print("<h3><a href='" +href+ "' download> " +packageName+ ".tar </a></h3>")
+    print("<h2><a href='" +href+ "' download> " +packageName+ ".tar </a></h2>")
