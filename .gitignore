@@ -1,2 +1,5 @@
 /crystal_files/
+/uploads/*
+/downloads/*
 index.html
+__pycache__

@@ -1,12 +1,15 @@
-def convert():
+def convert(packageName):
     report = []
     parameters = []
     drop_downs = []
 
+    source_path = "uploads/" +packageName+ "/"
+    output_path = "downloads/" +packageName+ "/"
+
     #parameters.properties
     profileSQLParameters = []
 
-    profileSQL = open('uploads/profile.sql', 'r')
+    profileSQL = open(source_path + 'profile.sql', 'r')
 
     for line in profileSQL:
         if "insert into TEAMS_RPT_PROFILE_PARAMETER".lower() in line.lower():
@@ -28,7 +31,7 @@ def convert():
 
         parameters.append(temp)
 
-    parametersProperties = open('downloads/parameters.properties', 'w')
+    parametersProperties = open(output_path + 'parameters.properties', 'w')
 
     for param in parameters:
         temp = ""
@@ -37,13 +40,13 @@ def convert():
         temp = temp[0 : len(temp)-1]
         parametersProperties.write(temp + "\n")
 
-    print("* created parameters.properties")
+    print("* created parameters.properties <br />")
 
 
     #drop_down.properties
     profileSQLDropDowns = []
 
-    profileSQL = open('uploads/profile.sql', 'r')
+    profileSQL = open(source_path + 'profile.sql', 'r')
 
     for line in profileSQL:
         if "insert into TEAMS_RPT_PROF_PARAM_LIST_ITEM".lower() in line.lower():
@@ -65,7 +68,7 @@ def convert():
 
         drop_downs.append(temp)
 
-    dropDownProperties = open('downloads/drop_down.properties', 'w')
+    dropDownProperties = open(output_path + 'drop_down.properties', 'w')
 
     for dropdown in drop_downs:
         temp = ""
@@ -74,7 +77,7 @@ def convert():
         temp = temp[0 : len(temp)-1]
         dropDownProperties.write(temp + "\n")
 
-    print("* created drop_down.properties")
+    print("* created drop_down.properties <br />")
 
 
     #report.properties
@@ -82,7 +85,7 @@ def convert():
     output_types = []
 
     ##Report Properties
-    cleanSQL = open('uploads/clean.sql', 'r')
+    cleanSQL = open(source_path + 'clean.sql', 'r')
 
     for line in cleanSQL:
         if "insert into RFDS_TEAMS_RPT_PROFILE".lower() in line.lower():
@@ -104,7 +107,7 @@ def convert():
             cleanSQLReportProps["active_flag"]  = temp[9]
 
     #Output Type
-    cleanSQL = open('uploads/clean.sql', 'r')
+    cleanSQL = open(source_path + 'clean.sql', 'r')
 
     for line in cleanSQL:
         if "insert into TEAMS_REPORT_PROF_OUTPUT_TYPE".lower() in line.lower():
@@ -124,7 +127,7 @@ def convert():
     #RPT to JRXML
     cleanSQLReportProps["file_name"] = cleanSQLReportProps["file_name"].replace(".rpt", ".jrxml")
 
-    reportProperties = open("downloads/report.properties", "w")
+    reportProperties = open(output_path + "report.properties", "w")
 
     reportProperties.write("Report_Name=\""      +cleanSQLReportProps["report_title"]+ "\"\n")
     reportProperties.write("Can_Be_Scheduled=\"" +cleanSQLReportProps["can_schedule"]+ "\"\n")
@@ -142,4 +145,4 @@ def convert():
     reportProperties.write("drop_down_file=\"drop_down.properties\"\n")
     reportProperties.write("PreProcessor=\""     +cleanSQLReportProps["preprocessor"]+ "\"\n")
 
-    print("* created report.properties")
+    print("* created report.properties <br />")
