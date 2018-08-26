@@ -31,7 +31,7 @@ print("""
      <br />
      <div>
        <label for="file">Choose files to upload:</label> <br />
-       <input class="input subtext" type="file" id="file" name="file" required multiple>
+       <input class="input subtext" type="file" id="userfile" name="userfile" required multiple>
      </div>
      <br /><br /><br />
      <div>
@@ -44,9 +44,10 @@ print("""
 
 formData = cgi.FieldStorage()
 
-packageName = formData["package"].value
+if "package" in formData:
+    packageName = formData["package"].value
 
-if "file" in formData:
+if "userfile" in formData and isinstance(formData["userfile"], list):
     if os.path.exists("uploads/" + packageName):
         shutil.rmtree("uploads/" + packageName)
 
@@ -56,7 +57,7 @@ if "file" in formData:
     os.makedirs("uploads/" + packageName)
     os.makedirs("downloads/" + packageName)
 
-    for resource in formData["file"]:
+    for resource in formData["userfile"]:
         fileName = resource.filename
         fileContent = resource.value
 
@@ -83,3 +84,7 @@ if "file" in formData:
 
     href = "downloads/" +packageName+ "/" +packageName+ ".tar"
     print("<h2><a href='" +href+ "' download> " +packageName+ ".tar </a></h2>")
+elif "userfile" in formData:
+    print("<div class='warning'>*** Please upload both clean.sql and profile.sql. ***</div>")
+else:
+    pass

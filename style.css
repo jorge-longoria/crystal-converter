@@ -1,17 +1,17 @@
 .wrapper {
-      font-family: Times New Roman;
+      font-family: "Times New Roman";
       width: 50%;
       clear: both
   }
   .title {
       float: left;
-      font-family: Times New Roman;
+      font-family: "Times New Roman";
       font-size: 18px;
       font-weight: bold;
   }
   .superscript {
       float: right;
-      font-family: Times New Roman;
+      font-family: "Times New Roman";
       font-size: 10px;
   }
   .form {
@@ -25,15 +25,15 @@
   }
   .bodytext {
       margin: 0.1in;
-      font-family: Lucida Console;
+      font-family: "Lucida Console";
       font-size: 12px;
   }
   .subtext{
-      font-family: Lucida Console;
+      font-family: "Lucida Console";
       font-size: 10px;"
   }
   .submit {
-      font-family: Lucida Console
+      font-family: "Lucida Console";
       font-size: 14px;
   }
   .list-numeral {
@@ -43,4 +43,9 @@
   .list-text {
     float: left;
     width: 95%
+  }
+  .warning {
+    font-style: italic;
+    font-size: 12px;
+    color: red;
   }
