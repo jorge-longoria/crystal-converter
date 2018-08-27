@@ -40,8 +40,6 @@ def convert(packageName):
         temp = temp[0 : len(temp)-1]
         parametersProperties.write(temp + "\n")
 
-    print("* created parameters.properties <br />")
-
 
     #drop_down.properties
     profileSQLDropDowns = []
@@ -76,8 +74,6 @@ def convert(packageName):
             temp += d + "|"
         temp = temp[0 : len(temp)-1]
         dropDownProperties.write(temp + "\n")
-
-    print("* created drop_down.properties <br />")
 
 
     #report.properties
@@ -124,7 +120,7 @@ def convert(packageName):
     cleanSQLReportProps["output_type"] = temp[0: len(temp)-1]
 
 
-    #RPT to JRXML
+    ##RPT to JRXML
     cleanSQLReportProps["file_name"] = cleanSQLReportProps["file_name"].replace(".rpt", ".jrxml")
 
     reportProperties = open(output_path + "report.properties", "w")
@@ -144,5 +140,3 @@ def convert(packageName):
     reportProperties.write("parameter_file=\"parameters.properties\"\n")
     reportProperties.write("drop_down_file=\"drop_down.properties\"\n")
     reportProperties.write("PreProcessor=\""     +cleanSQLReportProps["preprocessor"]+ "\"\n")
-
-    print("* created report.properties <br />")

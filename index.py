@@ -5,6 +5,18 @@ import shutil
 import tarfile
 import crystal
 
+formData = cgi.FieldStorage()
+
+#Used in form validation warning.
+if "userfile" in formData and not isinstance(formData["userfile"], list):
+    visibility = "visible"
+else:
+    visibility = "hidden"
+
+if "package" in formData:
+    packageName = formData["package"].value
+
+
 print("Content-Type: text/html; charset=utf-8\n")
 
 print("""
@@ -21,9 +33,9 @@ print("""
  </div>
 </div>
 
-<form method="post" enctype="multipart/form-data">
 <div class="form">
  <div class="bodytext">
+ <form method="post" enctype="multipart/form-data">
      <div>
         <label for="package">Report package name:</label> <br />
         <input class="input" type="text" id="package" name="package" required autofocus>
@@ -32,30 +44,23 @@ print("""
      <div>
        <label for="file">Choose files to upload:</label> <br />
        <input class="input subtext" type="file" id="userfile" name="userfile" required multiple>
+       <div class='warning' """+visibility+""">*** Please upload both clean.sql and profile.sql. ***</div>
      </div>
-     <br /><br /><br />
+     <br />
      <div>
        <button class="submit">Submit</button>
      </div>
+ </form>
  </div>
 </div>
-</form>
 """)
 
-formData = cgi.FieldStorage()
-
-if "package" in formData:
-    packageName = formData["package"].value
-
 if "userfile" in formData and isinstance(formData["userfile"], list):
-    if os.path.exists("uploads/" + packageName):
-        shutil.rmtree("uploads/" + packageName)
-
-    if os.path.exists("downloads/" + packageName):
-        shutil.rmtree("downloads/" + packageName)
-
-    os.makedirs("uploads/" + packageName)
-    os.makedirs("downloads/" + packageName)
+    for directory in ["uploads", "downloads"]:
+        dir = directory +"/"+ packageName
+        if os.path.exists(dir):
+            shutil.rmtree(dir)
+        os.makedirs(dir)
 
     for resource in formData["userfile"]:
         fileName = resource.filename
@@ -68,23 +73,19 @@ if "userfile" in formData and isinstance(formData["userfile"], list):
 
     crystal.convert(packageName)
 
-    with tarfile.open("downloads/" +packageName+ "/" +packageName+ ".tar", "w") as tar:
-        parameters = "downloads/" +packageName+ "/parameters.properties"
-        drop_down = "downloads/" +packageName+ "/drop_down.properties"
+    packageTar = "downloads/" +packageName+ "/" +packageName+ ".tar"
 
-        tar.add(parameters, arcname="parameters.properties")
-        tar.add(drop_down, arcname="drop_down.properties")
+    with tarfile.open(packageTar, "w") as tar:
+        for config in ["report", "parameters", "drop_down"]:
+            filepath = "downloads/" +packageName+ "/" +config+ ".properties"
+            tar.add(filepath, arcname=str(config + ".properties"))
 
-        db2 = tarfile.TarInfo("db2")
-        db2.type = tarfile.DIRTYPE
-        tar.addfile(db2)
+        for db in ["db2", "mssql", "oracle"]:
+            directory = tarfile.TarInfo(db)
+            directory.type = tarfile.DIRTYPE
+            tar.addfile(directory)
 
-    print("* created .tar package <br /><br />")
-    print("<b>Your download is ready: </b>")
-
-    href = "downloads/" +packageName+ "/" +packageName+ ".tar"
-    print("<h2><a href='" +href+ "' download> " +packageName+ ".tar </a></h2>")
-elif "userfile" in formData:
-    print("<div class='warning'>*** Please upload both clean.sql and profile.sql. ***</div>")
+    print("<div class='success'>Your download is ready: </div>")
+    print("<div class='success'><a href='" +packageTar+ "' download> " +packageName+ ".tar </a></div>")
 else:
     pass
